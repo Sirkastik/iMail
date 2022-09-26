@@ -36,7 +36,21 @@ export default {
       return this.isInbox ? "Archive" : "Unarchive";
     },
   },
+  created() {
+    document.addEventListener("keypress", this.handleKeyPress);
+  },
+  destroyed() {
+    document.removeEventListener("keypress", this.handleKeyPress);
+  },
   methods: {
+    handleKeyPress(e) {
+      if (e.key === "r") {
+        this.toggleRead();
+      }
+      if (e.key === "a") {
+        this.toggleArchive();
+      }
+    },
     toggleSelectAll() {
       if (this.allMarked) this.ids.splice(0);
       else {

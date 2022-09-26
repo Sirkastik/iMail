@@ -1,8 +1,8 @@
 <template>
   <div @click="closeModal" class="modal">
     <div @click.stop="" class="email">
-      <button class="btn btn__underlined" @click="closeModal">Close</button>
-      <ActionsButtons :ids="[openedEmail.id]" />
+      <button class="btn btn__underlined">Close</button>
+      <ActionsButtons :ids="[openedEmail.id]" @closeModal="closeModal" />
       <h1 class="subject">{{ openedEmail.subject }}</h1>
       <p>{{ openedEmail.body }}</p>
     </div>
@@ -17,9 +17,20 @@ export default {
   computed: {
     ...mapGetters(["openedEmail"]),
   },
+  created() {
+    document.addEventListener("keydown", this.handleKeyDown);
+  },
+  destroyed() {
+    document.removeEventListener("keydown", this.handleKeyDown);
+  },
   methods: {
     closeModal() {
       this.$store.dispatch("closeMail");
+    },
+    handleKeyDown(e) {
+      if (e.key === "Escape") {
+        this.closeModal();
+      }
     },
   },
 };
